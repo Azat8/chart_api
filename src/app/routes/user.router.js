@@ -47,7 +47,7 @@ router.post('/login', [
   }
 });
 
-router.get('/get-users', AuthMiddleware, async (req, res) => {
+router.get('/get-users',  async (req, res) => {
   const responseHandler = responseManager.getResponseHandler(res);
   
   try {

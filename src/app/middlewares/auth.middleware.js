@@ -4,17 +4,17 @@ const TokenManager = require("../utils/TokenManager");
 const User = require('../models/user.model');
 
 async function auth(req, res, next) {
-    const responseHandler = responseManager.getResponseHandler(res);
     let token = req.headers.authorization; 
     
     if(!token) {
-        responseHandler.onError(new AppError('No access token!'));
+        throw new Error('No access token');
     } else {
         let tokenManager = new TokenManager(process.env.JWT_SECRET, {
             expiresIn: 60 * 60 * 24,
             algorithm: 'HS256',
             noTimestamp: false
         });
+
         const decoded = await tokenManager.decode(token, process.env.JWT_SECRET);
         
         try {
@@ -23,13 +23,13 @@ async function auth(req, res, next) {
                 if (user) {
                     next();
                 } else {
-                    return responseHandler.onError(new AppError("Invalid credentials", 401));
+                    throw new Error('Invalid token!');
                 }
             } else {
-                return responseHandler.onError(new AppError("Invalid Access Token.", 403));
+                throw new Error('Invalid token!');
             }
         } catch (e) {
-            return responseHandler.onError(new AppError("Invalid Access Token.", 401));
+            throw new Error('Invalid token!');
         }
     }
     next();
