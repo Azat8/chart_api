@@ -10,7 +10,7 @@ function auth(req, res, next) {
         responseHandler.onError(new AppError('No access token!'));
     } else {
         try {
-            const decoded = await TokenManager.decode(token, env.env.JWT_SECRET);
+            const decoded = await TokenManager.decode(token, process.env.JWT_SECRET);
             if (decoded.uid) {
                 const user = await User.findOne({_id: decoded.uid});
                 if (user) {
