@@ -46,7 +46,7 @@ router.post('/login', [
     responseHandler.onError(e);
   }
 });
-console.log(AuthMiddleware);
+
 router.get('/get-users', AuthMiddleware, async (req, res) => {
   const responseHandler = responseManager.getResponseHandler(res);
   

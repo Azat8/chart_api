@@ -23,7 +23,7 @@ class UserController {
         if(user) {
             let {username} = user;
             const doesPasswordMatch = await BCrypt.compare(password, user.password);
-            console.log(password, user.password);
+            
             if (!doesPasswordMatch) {
                 return responseHandler.onError(new AppError('Wrong username or password', 404));
             }

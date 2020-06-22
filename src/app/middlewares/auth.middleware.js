@@ -6,11 +6,18 @@ const User = require('../models/user.model');
 async function auth(req, res, next) {
     const responseHandler = responseManager.getResponseHandler(res);
     let token = req.headers.authorization; 
+    
     if(!token) {
         responseHandler.onError(new AppError('No access token!'));
     } else {
+        let tokenManager = new TokenManager(process.env.JWT_SECRET, {
+            expiresIn: 60 * 60 * 24,
+            algorithm: 'HS256',
+            noTimestamp: false
+        });
+        const decoded = await tokenManager.decode(token, process.env.JWT_SECRET);
+        
         try {
-            const decoded = await TokenManager.decode(token, process.env.JWT_SECRET);
             if (decoded.uid) {
                 const user = await User.findOne({_id: decoded.uid});
                 if (user) {
