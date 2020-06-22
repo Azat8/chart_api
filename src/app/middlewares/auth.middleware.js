@@ -3,7 +3,7 @@ const responseManager = require('../utils/ResponseManager');
 const TokenManager = require("../utils/TokenManager");
 const User = require('../models/user.model');
 
-function auth(req, res, next) {
+async function auth(req, res, next) {
     const responseHandler = responseManager.getResponseHandler(res);
     let token = req.headers.authorization; 
     if(!token) {
